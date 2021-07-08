@@ -1,24 +1,19 @@
-import logo from './logo.svg';
 import './App.css';
+import './Table.js'
+import RulesTable from './Table.js';
+import {HashRouter,Route} from 'react-router-dom'
+import NewRules from './NewRules';
+import EditRules from './EditRule';
+import CopyRules from './CopyRules';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <HashRouter>
+        <Route exact path='/Table' component={RulesTable} />
+        <Route path='/NewRules' component={NewRules}/>
+        <Route path='/EditRules' component={EditRules}/>
+        <Route path='/CopyRules' component={CopyRules}/>
+    </HashRouter>
   );
 }
 
