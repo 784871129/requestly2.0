@@ -33,7 +33,7 @@ function EditRules(props){
                 name:rule.name,
                 des:rule.des,
                 items:[
-                    ...rule.items.filter((item)=>item.index!=index)
+                    ...rule.items.filter((item)=>item.index!==index)
                 ]
             }
         });

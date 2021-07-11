@@ -1,15 +1,6 @@
 import React from 'react';
 import {Form,Card,Space,Input,Button} from 'antd';
-
 import {DeleteOutlined} from '@ant-design/icons'
-
-function debounce(func,delay){
-    let timer=null;
-    return function(){
-        if(timer) clearTimeout(timer);
-        timer=setTimeout(func,delay);
-    }
-}
 
 function Item(props){
     const initdata=props.data;    

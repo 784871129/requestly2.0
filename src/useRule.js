@@ -44,7 +44,6 @@ function useRule(){
     }
     //根据输入更新rule
     const updateItemsofRule=(item)=>{
-
         debounce(setRule((rule)=>{
             const po=rule.items.findIndex((prev_item)=>{return prev_item.index===item.index});            
             rule.items[po]=item;

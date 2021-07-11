@@ -2,13 +2,13 @@ import React, { useCallback, useEffect ,useState} from 'react';
 import {Space,Button,Layout,Row,Col,Table,message,Modal} from 'antd';
 import {DeleteOutlined,EditOutlined,CopyOutlined} from '@ant-design/icons'
 import { Content,  Header } from 'antd/lib/layout/layout';
-import useProject, { useItems } from './useProject';
+import useProject from './useProject';
 import { useHistory } from 'react-router';
 import useRule from './useRule';
 
 function RulesTable(){
     const [{list},{getList}]=useProject();
-    const [{},{deleteRule}]=useRule()
+    const [,{deleteRule}]=useRule()
     const history=useHistory();
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [deleteid,setDeleteid]=useState(0);

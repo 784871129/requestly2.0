@@ -5,7 +5,7 @@ import {PlusCircleOutlined} from '@ant-design/icons'
 import { useHistory} from "react-router-dom";
 import useRule from './useRule';
 import Item from './Item'
-import {throttle,debounce} from 'lodash'
+import {debounce} from 'lodash'
 
 
 function NewRules(props){
@@ -23,7 +23,7 @@ function NewRules(props){
                 name:rule.name,
                 des:rule.des,
                 items:[
-                    ...rule.items.filter((item)=>item.index!=index)
+                    ...rule.items.filter((item)=>item.index!==index)
                 ]
             }
         });
