@@ -5,6 +5,8 @@ import {PlusCircleOutlined} from '@ant-design/icons'
 import { useHistory} from "react-router-dom";
 import useRule from './useRule';
 import Item from './Item'
+import {throttle,debounce} from 'lodash'
+
 
 function NewRules(props){
     const [{rule},{setRule,createRule,updateItemsofRule}]=useRule();
@@ -13,7 +15,7 @@ function NewRules(props){
 
     const handleClose=useCallback(()=>{
         history.push('/Table');
-    })
+    },[])
 
     const handleDelete=useCallback((index)=>{
         setRule((rule)=>{
@@ -25,8 +27,8 @@ function NewRules(props){
                 ]
             }
         });
-    })
-    const handleNewItem=useCallback(()=>{
+    },[])
+    const handleNewItem=()=>{
         const emptyItem={
             index:index+1,
             header:'',  
@@ -41,11 +43,11 @@ function NewRules(props){
                 items:[...rule.items,emptyItem]
             }
         })
-    })
+    }
 
     const handleFinished=useCallback((values) => {
         if(values.name.length!==0&&rule.items.every((item)=>(item.header.length!==0&&item.value.length!==0))){
-            createRule(values.name,values.des);
+            createRule(values.name,values.description);
         }else{
             notification.open({
             message:'必要字段为空',
@@ -54,20 +56,19 @@ function NewRules(props){
             });
             return;
         }            
-      });
+      },[]);
       
     const itemComponent=()=>{   
-        console.log('渲染时',rule);
         return rule.items.map((item)=>{
             return <Item data={item} key={item.index} index={item.index} handleDelete={handleDelete} handleItemDataChange={handleItemDataChange} />
         })
     }
 
-    const handleItemDataChange=useCallback((index,allChangedValues)=>{
+    const handleItemDataChange=useCallback(debounce((index,allChangedValues)=>{
+        console.log(allChangedValues);
         allChangedValues.index=index;
         updateItemsofRule(allChangedValues);
-        console.log('更新后',rule);         
-    })
+    },1000),[])
     
     return(     
          <Layout>

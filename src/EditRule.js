@@ -5,8 +5,8 @@ import {PlusCircleOutlined} from '@ant-design/icons'
 import { useHistory } from "react-router";
 import Item from './Item'
 import useRule from "./useRule";
+import debounce from "lodash.debounce";
 
-   
 
 function EditRules(props){
     const [{rule},{setRule,updateRule,updateItemsofRule,getRule}]=useRule();
@@ -18,17 +18,11 @@ function EditRules(props){
         const url=document.location.href;
         const po=url.indexOf('=');
         const _id=url.slice(po+1);
-        getRule(_id);
-        const items=rule.items.map((item)=>{item.index=index+1;setIndex(index+1);return item});
-        setRule((rule)=>{return {
-            name:rule.name,
-            des:rule.des,
-            items:items
-        }})       
+        getRule(_id);     
     },[])
     useEffect(()=>{
         form.setFieldsValue({name:rule.name,description:rule.des})
-    })
+    },[rule])
     const handleClose=useCallback(()=>{
         history.push('/Table');
     })
@@ -43,8 +37,8 @@ function EditRules(props){
                 ]
             }
         });
-    })
-    const handleNewItem=useCallback(()=>{
+    },[])
+    const handleNewItem=()=>{
         const emptyItem={
             index:index+1,
             header:'',  
@@ -59,8 +53,9 @@ function EditRules(props){
                 items:[...rule.items,emptyItem]
             }
         })
-    })
+    }
     const handleFinished=useCallback((values)=>{
+        console.log('val',values,'item',rule.items);
         if(values.name.length!==0&&rule.items.every((item)=>(item.header.length!==0&&item.value.length!==0))){
             const url=document.location.href;
             const po=url.indexOf('=');
@@ -74,19 +69,21 @@ function EditRules(props){
             });
             return;
         }            
-      });
+      },[rule]);
 
     const itemComponent=()=>{   
+        console.log('渲染时:',rule);
         return rule.items.map((item)=>{
             return <Item data={item} key={item.index} index={item.index} handleDelete={handleDelete} handleItemDataChange={handleItemDataChange} />
         })
     }
 
-    const handleItemDataChange=useCallback((index,allChangedValues)=>{
+    const handleItemDataChange=useCallback(debounce((index,allChangedValues)=>{
         allChangedValues.index=index;
+        console.log('allchange',allChangedValues);
         updateItemsofRule(allChangedValues);
         console.log('更新后',rule);         
-    })
+    },1000),[])
     return(
         <Layout>
         <Form name='new_rule' form={form} 

@@ -6,6 +6,7 @@ import { useHistory } from "react-router";
 import Item from './Item'
 import useRule from "./useRule";
 import { useForm } from "antd/lib/form/Form";
+import debounce from "lodash.debounce";
 
    
 
@@ -20,19 +21,13 @@ function CopyRules(props){
         const po=url.indexOf('=');
         const _id=url.slice(po+1);
         getRule(_id);
-        const items=rule.items.map((item)=>{item.index=index+1;setIndex(index+1);return item});
-        setRule((rule)=>{return {
-            name:rule.name,
-            des:rule.des,
-            items:items
-        }})
     },[])
     useEffect(()=>{
         form.setFieldsValue({name:rule.name,description:rule.des})
-    })
+    },[rule])
     const handleClose=useCallback(()=>{
         history.push('/Table');
-    })
+    },[])
 
     const handleDelete=useCallback((index)=>{
         setRule((rule)=>{
@@ -44,7 +39,7 @@ function CopyRules(props){
                 ]
             }
         });
-    })
+    },[])
     const handleNewItem=useCallback(()=>{
         const emptyItem={
             index:index+1,
@@ -60,10 +55,10 @@ function CopyRules(props){
                 items:[...rule.items,emptyItem]
             }
         })
-    })
+    },[])
     const handleFinished=useCallback((values) => {
         if(values.name.length!==0&&rule.items.every((item)=>(item.header.length!==0&&item.value.length!==0))){
-            createRule(values.name,values.des);
+            createRule(values.name,values.description);
         }else{
             notification.open({
             message:'必要字段为空',
@@ -72,7 +67,7 @@ function CopyRules(props){
             });
             return;
         }            
-      });
+      },[rule]);
 
     const itemComponent=()=>{   
         console.log('渲染时',rule);
@@ -81,11 +76,11 @@ function CopyRules(props){
         })
     }
 
-    const handleItemDataChange=useCallback((index,allChangedValues)=>{
+    const handleItemDataChange=useCallback(debounce((index,allChangedValues)=>{
         allChangedValues.index=index;
         updateItemsofRule(allChangedValues);
         console.log('更新后',rule);         
-    })
+    },1000),[])
     return(
         <Layout>
         <Form name='new_rule' form={form} initialValues={{

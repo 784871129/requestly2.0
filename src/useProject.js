@@ -5,7 +5,7 @@ function useProject(){
     const [list,setList]=useState([]);
     const [loading,setLoading]=useState(true);
     const getList=async ()=>{
-        await axios.get('https://qcwdoj.fn.thelarkcloud.com/getTableData')
+        await axios.get('https://qcwdoj.fn.thelarkcloud.com/getList')
         .then((res)=>{
             //初始化列表
             setLoading(true);
@@ -23,14 +23,24 @@ function useProject(){
             setLoading(false);
         })
         .catch((err)=>{
-
             console.log(err)
+            setLoading(false)
         })
     }
 
     return [{list,loading},{getList}];
 }
 
+function debounce(func,delay){
+    let timer=null;
+    return function(){
+        if(timer) clearTimeout(timer);
+        timer=setTimeout(func,delay);
+    }
+}
 
 
-export default useProject
+
+
+
+export default useProject 

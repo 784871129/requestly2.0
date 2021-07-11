@@ -22,24 +22,24 @@ function RulesTable(){
 
     const handleNewRules=useCallback(()=>{
         history.push('/NewRules')
-    })
+    },[])
 
     
     const showModal = useCallback(() => {
         setIsModalVisible(true);
-  });
+    },[]);
 
-    const handleOk = async () => {
+    const handleOk = useCallback(async () => {
         console.log(deleteid);
         await deleteRule(deleteid);
         await getList();
         setIsModalVisible(false);
-        console.log('huoquzhihou',list);
-  }
+        console.log('重新拉取：',list);
+  },[deleteid])
 
     const handleCancel = useCallback(() => {
     setIsModalVisible(false);
-  })
+  },[])
 
     const handleDelete=useCallback((_id)=>{
         setDeleteid(_id);
@@ -49,17 +49,17 @@ function RulesTable(){
             //setIsComfirmed(false);
             //getTable();
         //}       
-    })
+    },[])
 
 
     const handleEdit=useCallback((_id)=>{
         const url='/EditRules?_id='+_id
         history.push(url);
-    })
+    },[])
     const handleCopy=useCallback((_id)=>{
         const url='/CopyRules?_id='+_id
         history.push(url);
-    })
+    },[])
     const columns = [   
         {
           title: 'NAME',
